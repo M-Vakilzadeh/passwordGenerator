@@ -165,6 +165,9 @@
       #GenPassBtn {
         margin-top: 20px;
       }
+      .RadioLabel{
+        padding: 10px 0;
+      }
     </style>
   </head>
   <body>
@@ -174,9 +177,9 @@
       <div id="radio-box-div">
         <span id="radio-box-span">
           <input type="radio" name="generatorType" id="kzRadio" checked onclick="toggleExpertOptions()">
-          <label for="kzRadio">KZ Generator</label>
+          <label for="kzRadio" class="RadioLabel">KZ Generator</label>
           <input type="radio" name="generatorType" id="expertRadio" onclick="toggleExpertOptions()">
-          <label for="expertRadio">Expert Generator</label>
+          <label for="expertRadio" class="RadioLabel">Expert Generator</label>
         </span>
       </div>
       <div id="expertOptions" style="display: none;">
@@ -298,7 +301,6 @@
           BibSound.pause();
           BibSound.currentTime = 0;
         }, BibSound.duration * 1000);
-        // Hide expert options when KZ generator is selected
         var expertOptions = document.getElementById("expertOptions");
         expertOptions.style.display = generatorType === "kzRadio" ? "none" : "block";
       }
