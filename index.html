@@ -5,18 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Password Generator</title>
   <style>
-    body {
+    body, html, #app {
       font-family: 'Arial', sans-serif;
-      margin: 0;
-      height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(-30deg, rgb(17, 52, 85), rgba(116,0,92,1), rgb(189, 24, 24),rgb(206, 18, 190),rgb(255, 157, 10));
-      background-size: 400% 400%;
-      animation: gradient 15s ease infinite;
       color: #6d0000;
       font-weight: bold;
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('wallpaper.jpg');
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-position:center;
+      background-size: cover;
     }
 
     @keyframes gradient {
@@ -33,14 +36,16 @@
 
     #container {
       position: relative;
-      width: 300px;
+      width: 400px;
       margin: 20px;
-background: #fff;
       padding: 20px;
       border-radius: 10px;
--webkit-box-shadow: 0px 0px 25px 3px rgba(0, 0, 0, 0.4);
--moz-box-shadow: 0px 0px 25px 3px rgba(0, 0, 0, 0.4);
-box-shadow: 0px 0px 25px 3px rgba(0, 0, 0, 0.4);
+      background: linear-gradient(-30deg, rgb(151, 0, 139), rgb(17, 52, 85), rgb(0, 216, 187), rgb(20, 255, 12),rgb(255, 251, 0),rgb(255, 115, 0),rgb(255, 0, 0));
+      background-size: 400% 400%;
+      animation: gradient 10s ease infinite;
+      -moz-box-shadow: 0px 0px 25px 3px rgba(255, 255, 255, 0.4);
+      box-shadow: 0px 0px 25px 3px rgba(255, 255, 255, 0.4);
+      -webkit-box-shadow: 0px 0px 25px 3px rgba(255, 255, 255, 0.4);
     }
 
     h1 {
@@ -48,42 +53,60 @@ box-shadow: 0px 0px 25px 3px rgba(0, 0, 0, 0.4);
       text-shadow: -1px -2px 4px rgba(217, 0, 0, 1);
       margin: 10px 0;
     }
+    input{
+      border: 1px solid #030013;
+      border-radius: 10px;
+      font-size: 1em;
+      padding: 10px;
+    }
 
     input[type="button"] {
       width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
       box-sizing: border-box;
       cursor: pointer;
       transition: background-color 0.3s ease-in-out;
       margin: 10 px 0;
-    }
-
-    label{
-      margin: 10px 0;
+      background: rgb(0, 0, 0, 0.1);
     }
     input[type="button"]:hover {
-      background-color: #4CAF50;
+      background: #003503;
       color: #fff;
+      border: 1px solid #003503;
+      transition-duration: 0.5s;
     }
 
-    input[type="button"]:active {
-      background-color: #45a049;
+    #radio-box-div{
+      text-align: center;
+      margin: 30px 0;
     }
 
+  #radio-box-span{
+    margin: 15px 0;
+    background: #000;
+    padding: 10px;
+    border-radius: 10px;
+    color: #fff;
+  }
+
+  #expertOptions label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 12px;
+  }
+  #expertOptions label input{
+    width: 40px;
+  }
     #password {
       width: 100%;
       margin: 15px 0;
       padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
       box-sizing: border-box;
       text-align: center;
       font-weight: bold;
       font-size: 1.2em;
       user-select: all;
-      cursor: pointer;
+      cursor:pointer;
     }
 
     .copied-dialog {
@@ -133,171 +156,175 @@ box-shadow: 0px 0px 25px 3px rgba(0, 0, 0, 0.4);
   </style>
 </head>
 <body>
-  <div id="container">
-    <h1>Passwords Generator</h1>
-
-    <!-- Generator Type Radio Buttons -->
-    <input type="radio" name="generatorType" id="kzRadio" checked onclick="toggleExpertOptions()"> <label for="kzRadio">KZ Generator</label>
-    <input type="radio" name="generatorType" id="expertRadio" onclick="toggleExpertOptions()"> <label for="expertRadio">Expert Generator</label>
-
-    <!-- Expert Options -->
-    <div id="expertOptions" style="display: none;">
-      <label>
-        <input type="checkbox" id="includeUppercase"> Include Uppercase Letters
-      </label>
-      <label>
-        <input type="checkbox" id="includeLowercase"> Include Lowercase Letters
-      </label>
-      <label>
-        <input type="checkbox" id="includeNumbers" checked> Include Numbers
-      </label>
-      <label>
-        <input type="checkbox" id="includeSymbols"> Include Specific Symbols
-      </label>
-      <label>
-        Blacklist Characters:
-        <input type="text" id="blacklistCharacters">
-      </label>
-      <label>
-        Password Length:
-        <input type="number" id="passwordLength" value="8" min="4">
-      </label>
+      <div id="container">
+        <h1>Passwords Generator</h1>
+    <div>
     </div>
-
-    <input type="button" value="Generate Password" id="GenPassBtn" onclick="generatePassword()">
-    <br>
-    <input type="text" id="password" readonly>
-    <div class="copied-dialog" id="copiedDialog">Copied! :D</div>
-
-    <audio id="backgroundMusic">
-      <source src="back music.mp3" type="audio/mp3">
-    </audio>
-
-    <audio id="shufflingCardsSound">
-      <source src="shuffling-cards.mp3" type="audio/mp3">
-    </audio>
-
-    <button id="hiddenButton" class="hidden-button" onclick="playBackgroundMusic()"></button>
-  </div>
-
-  <script>
-    function playBackgroundMusic() {
-      var backgroundMusic = document.getElementById("backgroundMusic");
-      backgroundMusic.play();
-    }
-
-    function toggleExpertOptions() {
-      var expertOptions = document.getElementById("expertOptions");
-      expertOptions.style.display = kzRadio.checked ? "none" : "block";
-    }
-
-    document.addEventListener("DOMContentLoaded", function() {
-      var expertRadio = document.getElementById("expertRadio");
-      var expertOptions = document.getElementById("expertOptions");
-
-      expertRadio.addEventListener("change", function() {
-        expertOptions.style.display = this.checked ? "block" : "none";
-      });
-
-      setTimeout(function() {
-        document.getElementById("hiddenButton").click();
-      }, 200);
-    });
-
-    function generatePassword() {
-      var shufflingCardsSound = document.getElementById("shufflingCardsSound");
-      shufflingCardsSound.play();
-
-      var generatorType = document.querySelector('input[name="generatorType"]:checked').id;
-
-      if (generatorType === "expertRadio") {
-        var includeUppercase = document.getElementById("includeUppercase").checked;
-        var includeLowercase = document.getElementById("includeLowercase").checked;
-        var includeNumbers = document.getElementById("includeNumbers").checked;
-        var includeSymbols = document.getElementById("includeSymbols").checked;
-        var blacklistCharacters = document.getElementById("blacklistCharacters").value;
-        var passwordLength = document.getElementById("passwordLength").value;
-
-        var characters = "";
-        var password = "";
-
-        if (includeUppercase) characters += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        if (includeLowercase) characters += "abcdefghijklmnopqrstuvwxyz";
-        if (includeNumbers) characters += "0123456789";
-        if (includeSymbols) characters += "!@#$%^&*()-=+_";
-
-        characters = characters.replace(new RegExp('[' + blacklistCharacters + ']', 'g'), '');
-
-        for (var i = 0; i < passwordLength; i++) {
-          password += characters.charAt(Math.floor(Math.random() * characters.length));
+        <div id="radio-box-div">
+          <span id="radio-box-span">
+            <input type="radio" name="generatorType" id="kzRadio" checked onclick="toggleExpertOptions()"> <label for="kzRadio">KZ Generator</label>
+            <input type="radio" name="generatorType" id="expertRadio" onclick="toggleExpertOptions()"> <label for="expertRadio">Expert Generator</label>  
+          </span>
+        </div>
+        <!-- Expert Options -->
+        <div id="expertOptions" style="display: none;">
+          <label>
+            Include Uppercase Letters <input type="checkbox" id="includeUppercase"> 
+          </label>
+          <label>
+            Include Lowercase Letters <input type="checkbox" id="includeLowercase"> 
+          </label>
+          <label>
+            Include Numbers <input type="checkbox" id="includeNumbers" checked> 
+          </label>
+          <label>
+            Include Symbols <input type="checkbox" id="includeSymbols"> 
+          </label>
+          <label>
+            Blacklist Characters:
+            <input type="text" id="blacklistCharacters">
+          </label>
+          <label>
+            Password Length:
+            <input type="number" id="passwordLength" value="8" min="4">
+          </label>
+        </div>
+    
+        <input type="button" value="Generate Password" id="GenPassBtn" onclick="generatePassword()">
+        <br>
+        <input type="text" id="password" readonly>
+        <div class="copied-dialog" id="copiedDialog">Copied! :D</div>
+    
+        <audio id="backgroundMusic">
+          <source src="back music.mp3" type="audio/mp3">
+        </audio>
+    
+        <audio id="shufflingCardsSound">
+          <source src="shuffling-cards.mp3" type="audio/mp3">
+        </audio>
+    
+        <button id="hiddenButton" class="hidden-button" onclick="playBackgroundMusic()"></button>
+      </div>
+  <script>   
+        function playBackgroundMusic() {
+          var backgroundMusic = document.getElementById("backgroundMusic");
+          backgroundMusic.play();
+        }
+    
+        function toggleExpertOptions() {
+          var expertOptions = document.getElementById("expertOptions");
+          expertOptions.style.display = kzRadio.checked ? "none" : "block";
+        }
+    
+        document.addEventListener("DOMContentLoaded", function() {
+          var expertRadio = document.getElementById("expertRadio");
+          var expertOptions = document.getElementById("expertOptions");
+    
+          expertRadio.addEventListener("change", function() {
+            expertOptions.style.display = this.checked ? "block" : "none";
+          });
+    
+          setTimeout(function() {
+            document.getElementById("hiddenButton").click();
+          }, 200);
+        });
+    
+        function generatePassword() {
+          var shufflingCardsSound = document.getElementById("shufflingCardsSound");
+          shufflingCardsSound.play();
+    
+          var generatorType = document.querySelector('input[name="generatorType"]:checked').id;
+    
+          if (generatorType === "expertRadio") {
+            var includeUppercase = document.getElementById("includeUppercase").checked;
+            var includeLowercase = document.getElementById("includeLowercase").checked;
+            var includeNumbers = document.getElementById("includeNumbers").checked;
+            var includeSymbols = document.getElementById("includeSymbols").checked;
+            var blacklistCharacters = document.getElementById("blacklistCharacters").value;
+            var passwordLength = document.getElementById("passwordLength").value;
+    
+            var characters = "";
+            var password = "";
+    
+            if (includeUppercase) characters += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            if (includeLowercase) characters += "abcdefghijklmnopqrstuvwxyz";
+            if (includeNumbers) characters += "0123456789";
+            if (includeSymbols) characters += "!@#$%^&*()-=+_";
+    
+            characters = characters.replace(new RegExp('[' + blacklistCharacters + ']', 'g'), '');
+    
+            for (var i = 0; i < passwordLength; i++) {
+              password += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+    
+          } else {
+            var englishCharacters = "abcdefghijklmnopqrstuvwxyz";
+            var englishCharactersLength = englishCharacters.length;
+            var firstEnglishCharacter = englishCharacters.charAt(Math.floor(Math.random() * englishCharactersLength));
+            var secondEnglishCharacter = englishCharacters.charAt(Math.floor(Math.random() * englishCharactersLength));
+            var numbers = "0123456789";
+            var numbersLength = numbers.length;
+            var firstNumber = numbers.charAt(Math.floor(Math.random() * numbersLength));
+            var secondNumber = numbers.charAt(Math.floor(Math.random() * numbersLength));
+            var thirdNumber = numbers.charAt(Math.floor(Math.random() * numbersLength));
+            var fourthNumber = numbers.charAt(Math.floor(Math.random() * numbersLength));
+            var symbols = "!@#$%^&*()-=+_";
+            var symbolsLength = symbols.length;
+            var englishCharacter = englishCharacters.charAt(Math.floor(Math.random() * englishCharactersLength));
+            var symbol = symbols.charAt(Math.floor(Math.random() * symbolsLength));
+            password = firstEnglishCharacter + secondEnglishCharacter + firstNumber + secondNumber + thirdNumber + fourthNumber + englishCharacter + symbol;
+    
+            var passwordField = document.getElementById("password");
+            passwordField.value = password;
+            passwordField.select(); // Automatically select the text
+            document.execCommand("copy"); // Copy the selected text to the clipboard
+    
+            var copiedDialog = document.getElementById("copiedDialog");
+            copiedDialog.classList.add("show");
+    
+            passwordField.classList.add("wheel-of-luck");
+    
+            setTimeout(function () {
+              copiedDialog.classList.remove("show");
+              setTimeout(function () {
+                passwordField.classList.remove("wheel-of-luck");
+              }, 1000);
+            }, 1500);
+    
+            setTimeout(function () {
+              shufflingCardsSound.pause();
+              shufflingCardsSound.currentTime = 0;
+            }, shufflingCardsSound.duration * 1000);
+          }
+    
+          var passwordField = document.getElementById("password");
+          passwordField.value = password;
+          passwordField.select(); // Automatically select the text
+          document.execCommand("copy"); // Copy the selected text to the clipboard
+    
+          var copiedDialog = document.getElementById("copiedDialog");
+          copiedDialog.classList.add("show");
+    
+          passwordField.classList.add("wheel-of-luck");
+    
+          setTimeout(function () {
+            copiedDialog.classList.remove("show");
+            setTimeout(function () {
+              passwordField.classList.remove("wheel-of-luck");
+            }, 1000);
+          }, 1500);
+    
+          setTimeout(function () {
+            shufflingCardsSound.pause();
+            shufflingCardsSound.currentTime = 0;
+          }, shufflingCardsSound.duration * 1000);
+    
+          // Hide expert options when KZ generator is selected
+          var expertOptions = document.getElementById("expertOptions");
+          expertOptions.style.display = generatorType === "kzRadio" ? "none" : "block";
         }
 
-      } else {
-        var englishCharacters = "abcdefghijklmnopqrstuvwxyz";
-        var englishCharactersLength = englishCharacters.length;
-        var firstEnglishCharacter = englishCharacters.charAt(Math.floor(Math.random() * englishCharactersLength));
-        var secondEnglishCharacter = englishCharacters.charAt(Math.floor(Math.random() * englishCharactersLength));
-        var numbers = "0123456789";
-        var numbersLength = numbers.length;
-        var firstNumber = numbers.charAt(Math.floor(Math.random() * numbersLength));
-        var secondNumber = numbers.charAt(Math.floor(Math.random() * numbersLength));
-        var thirdNumber = numbers.charAt(Math.floor(Math.random() * numbersLength));
-        var fourthNumber = numbers.charAt(Math.floor(Math.random() * numbersLength));
-        var symbols = "!@#$%^&*()-=+_";
-        var symbolsLength = symbols.length;
-        var englishCharacter = englishCharacters.charAt(Math.floor(Math.random() * englishCharactersLength));
-        var symbol = symbols.charAt(Math.floor(Math.random() * symbolsLength));
-        password = firstEnglishCharacter + secondEnglishCharacter + firstNumber + secondNumber + thirdNumber + fourthNumber + englishCharacter + symbol;
-
-        var passwordField = document.getElementById("password");
-        passwordField.value = password;
-        passwordField.select(); // Automatically select the text
-        document.execCommand("copy"); // Copy the selected text to the clipboard
-
-        var copiedDialog = document.getElementById("copiedDialog");
-        copiedDialog.classList.add("show");
-
-        passwordField.classList.add("wheel-of-luck");
-
-        setTimeout(function () {
-          copiedDialog.classList.remove("show");
-          setTimeout(function () {
-            passwordField.classList.remove("wheel-of-luck");
-          }, 1000);
-        }, 1500);
-
-        setTimeout(function () {
-          shufflingCardsSound.pause();
-          shufflingCardsSound.currentTime = 0;
-        }, shufflingCardsSound.duration * 1000);
-      }
-
-      var passwordField = document.getElementById("password");
-      passwordField.value = password;
-      passwordField.select(); // Automatically select the text
-      document.execCommand("copy"); // Copy the selected text to the clipboard
-
-      var copiedDialog = document.getElementById("copiedDialog");
-      copiedDialog.classList.add("show");
-
-      passwordField.classList.add("wheel-of-luck");
-
-      setTimeout(function () {
-        copiedDialog.classList.remove("show");
-        setTimeout(function () {
-          passwordField.classList.remove("wheel-of-luck");
-        }, 1000);
-      }, 1500);
-
-      setTimeout(function () {
-        shufflingCardsSound.pause();
-        shufflingCardsSound.currentTime = 0;
-      }, shufflingCardsSound.duration * 1000);
-
-      // Hide expert options when KZ generator is selected
-      var expertOptions = document.getElementById("expertOptions");
-      expertOptions.style.display = generatorType === "kzRadio" ? "none" : "block";
-    }
-  </script>
+        
+      </script>
 </body>
 </html>
